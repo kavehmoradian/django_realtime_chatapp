@@ -48,5 +48,5 @@ class UserLoginView(View):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home:home')
+                return redirect('core:chat_list')
             return render(request, self.template_name, {'form':form})

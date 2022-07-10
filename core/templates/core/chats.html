@@ -1,0 +1,39 @@
+{% extends "home/base.html" %}
+
+{% block title %} chats {% endblock %}
+
+{% block content %}
+<div class="container">
+      <div class="card text-center mb-4">
+      <div class="card-body" style="margin:auto">
+        <form method="get" action={% url 'core:find_chat' %} class="form-inline my-2 my-lg-0">
+          <input name="name" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  {% for chat in chats %}
+    <div class="card text-center mb-4" >
+      <div class="card-header">
+        {% if chat.user1 == request.user%}
+            {{chat.user2}}
+        {% else %}
+            {{chat.user1}}
+        {% endif %}
+      </div>
+      <div class="card-body">
+        {% if chat.user1 == request.user%}
+        <a href="{% url 'core:join_chat' chat.user2 %}" class="btn btn-primary">Chat:)</a>
+        {% else %}
+        <a href="{% url 'core:join_chat' chat.user1 %}" class="btn btn-primary">Chat:)</a>
+        {% endif %}
+      </div>
+      <div class="card-footer text-muted">
+      updated on: {{ chat.updated_on }}
+      </div>
+    </div>
+
+  {% endfor %}
+</div>
+
+{% endblock %}

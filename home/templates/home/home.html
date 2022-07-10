@@ -3,5 +3,11 @@
 {% block title %} django chat app {% endblock %}
 
 {% block content %}
-  <h1>home page</h1>
+<div class="container">
+  <h1 class="display-3">Home Page!</h1>
+  <p>you must login or register.</p>
+  <a class="btn btn-primary btn-lg" href="{% url 'accounts:user_login' %}" role="button">Login</a>
+  <a class="btn btn-danger btn-lg ml-2" href="{% url 'accounts:user_register' %}" role="button">Register</a>
+</div>
+
 {% endblock %}

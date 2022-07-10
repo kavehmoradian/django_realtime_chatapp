@@ -11,7 +11,7 @@ class Chat(models.Model):
     class Meta:
         unique_together = (("user1", "user2"))
         verbose_name = 'Chat Message'
-        ordering = ['updated_on']
+        ordering = ['-updated_on']
 
     def __str__(self):
         return '%s_%s' %(self.user1.username,self.user2.username)
@@ -28,6 +28,10 @@ class Chat(models.Model):
     def create_if_not_exists(user1,user2):
         res = Chat.chat_session_exists(user1,user2)
         return False if res else Chat.objects.create(user1=user1,user2=user2)
+
+    @staticmethod
+    def chat_sessions(user):
+        return Chat.objects.filter(Q(user1=user) | Q(user2=user)).all()
 
 class Message(models.Model):
     text = models.TextField()

@@ -13,3 +13,16 @@ def join_chat(request, receiver):
 
     return render(request, 'core/joinchat.html',
             {'receiver': receiver, 'messages': messages})
+
+
+def chat_list(request):
+    if request.user.is_anonymous:
+        return redirect('home:home')
+    chats = Chat.chat_sessions(request.user)
+    return render(request, 'core/chats.html',
+            {'chats':chats})
+def find_chat(request):
+    if request.method == 'GET':
+        receiver = get_object_or_404(User, username=request.GET['name'])
+        print(receiver)
+        return redirect("core:join_chat", receiver.username)
