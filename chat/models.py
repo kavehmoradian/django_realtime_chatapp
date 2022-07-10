@@ -22,12 +22,12 @@ class Chat(models.Model):
 
     @staticmethod
     def chat_session_exists(user1,user2):
-        return ChatSession.objects.filter(Q(user1=user1, user2=user2) | Q(user1=user2, user2=user1)).first()
+        return Chat.objects.filter(Q(user1=user1, user2=user2) | Q(user1=user2, user2=user1)).first()
 
     @staticmethod
     def create_if_not_exists(user1,user2):
-        res = ChatSession.chat_session_exists(user1,user2)
-        return False if res else ChatSession.objects.create(user1=user1,user2=user2)
+        res = Chat.chat_session_exists(user1,user2)
+        return False if res else Chat.objects.create(user1=user1,user2=user2)
 
 class Message(models.Model):
     text = models.TextField()
@@ -38,11 +38,11 @@ class Message(models.Model):
                             on_delete=models.CASCADE,
                             related_name='user_messages')
     class Meta:
-        ordering = ['-created']
+        ordering = ['created']
 
     def __str__(self):
-        return text[:20]
+        return self.text[:20]
 
     def save(self,*args,**kwargs):
         super().save(*args,**kwargs)
-        Chat.objects.get(id = self.chat_session.id).save()
+        Chat.objects.get(id = self.chat.id).save()

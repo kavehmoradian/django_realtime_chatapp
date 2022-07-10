@@ -40,7 +40,20 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">My Messages</h5>
-              <div id="messages-list" style="height: 20rem; overflow-y: scroll;"></div>
+              <div id="messages-list" style="height: 20rem; overflow-y: scroll;">
+                {% for message in messages %}
+                  <div class="media mb-2">
+                    <div class="media-body">
+                      {% if message.sender == request.user %}
+                      <h6 class="mt-0"><strong>You</strong></h6>
+                      {% else %}
+                      <h6 class="mt-0"><strong>{{ message.sender }}</strong></h6>
+                      {% endif %}
+                      {{ message.text }}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
             </div>
           </div>
         </div>
@@ -60,7 +73,7 @@
 
       socket.onmessage = function(e) {
         var message = JSON.parse(e.data);
-        $('#messages-list').prepend(`
+        $('#messages-list').append(`
           <div class="media mb-2">
             <div class="media-body">
               <h6 class="mt-0"><strong>USERNAME</strong></h6>
@@ -86,7 +99,7 @@
         var messageInputDom = document.querySelector('#msg-input');
         var message = messageInputDom.value;
 
-        $('#messages-list').prepend(`
+        $('#messages-list').append(`
           <div class="media mb-2">
             <div class="media-body">
               <h6 class="mt-0"><strong>You</strong></h6>
